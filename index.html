@@ -4,7 +4,285 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ODYSSEY: Exploring the Great Beyond</title>
-    <link rel="stylesheet" href="assets/css/style.css">
+    <style>
+:root {
+    --bg-earth: #E0F2F1;
+    --bg-orbit: #1A237E;
+    --bg-deep-space: #0B0D17;
+    --text-primary: #FFFFFF;
+    --accent-mars: #FF5252;
+    --accent-nebula: #9C27B0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    color: var(--text-primary);
+    background-color: var(--bg-earth);
+    overflow-x: hidden;
+    scroll-behavior: smooth;
+    transition: background-color 1s ease;
+}
+
+h1, h2, h3 {
+    font-family: 'Montserrat', sans-serif;
+    text-transform: uppercase;
+}
+
+.distance-tracker {
+    position: fixed;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px 15px;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    z-index: 1000;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+}
+
+.v-section {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 4rem 2rem;
+    position: relative;
+}
+
+.content-wrapper {
+    max-width: 1000px;
+    text-align: center;
+}
+
+#hero {
+    background: linear-gradient(to bottom, var(--bg-earth), #81D4FA);
+    color: #0b0d17;
+}
+
+#the-moon {
+    background: linear-gradient(to bottom, #81D4FA, #263238);
+}
+
+#hero h1 {
+    font-size: 5rem;
+    margin-bottom: 1rem;
+}
+
+.fade-in {
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 1s ease-out;
+}
+
+.fade-in.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+#solar-system {
+    background-color: var(--bg-orbit);
+}
+
+#jupiter {
+    background: linear-gradient(to bottom, #1A237E, #3E2723);
+}
+
+.cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-top: 3rem;
+}
+
+.info-card {
+    background: rgba(255, 255, 255, 0.05);
+    padding: 2rem;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    text-align: left;
+}
+
+.info-card h3 {
+    color: var(--accent-mars);
+    margin-bottom: 1rem;
+}
+
+#deep-space {
+    background-color: var(--bg-deep-space);
+}
+
+#exoplanets {
+    background: linear-gradient(to bottom, #0B0D17, #4A148C);
+}
+
+.deep-content {
+    max-width: 800px;
+    margin: 0 auto;
+    font-size: 1.2rem;
+    line-height: 1.8;
+}
+
+.image-placeholder {
+    background-size: cover;
+    background-position: center;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+}
+
+#humanity {
+    background-color: #050505;
+}
+
+.timeline {
+    margin: 3rem 0;
+    border-left: 2px solid var(--accent-nebula);
+    padding-left: 2rem;
+    text-align: left;
+}
+
+.timeline-item {
+    margin-bottom: 2rem;
+    font-size: 1.1rem;
+}
+
+.timeline-item strong {
+    color: var(--accent-nebula);
+    display: block;
+    font-size: 1.5rem;
+}
+
+footer {
+    margin-top: 5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    padding-top: 2rem;
+    font-style: italic;
+    opacity: 0.6;
+}
+
+@media (max-width: 768px) {
+    #hero h1 {
+        font-size: 3rem;
+    }
+    
+    .v-section {
+        padding: 2rem 1rem;
+    }
+    
+    .distance-tracker {
+        bottom: 20px;
+        top: auto;
+        right: 50%;
+        transform: translateX(50%);
+    }
+
+    .discovery-sidebar {
+        width: 100%;
+    }
+}
+
+/* Sidebar Styles */
+.discovery-sidebar {
+    position: fixed;
+    top: 0;
+    right: 0;
+    width: 350px;
+    height: 100vh;
+    background: rgba(11, 13, 23, 0.95);
+    backdrop-filter: blur(10px);
+    z-index: 2000;
+    padding: 3rem 2rem;
+    transform: translateX(100%);
+    transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+    border-left: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.discovery-sidebar.active {
+    transform: translateX(0);
+}
+
+.close-sidebar {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
+}
+
+/* 3D Planet Styles */
+.planet-container {
+    width: 300px;
+    height: 300px;
+    perspective: 1000px;
+    margin: 2rem auto;
+    cursor: pointer;
+}
+
+.sphere {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    transform-style: preserve-3d;
+    animation: rotate 20s linear infinite;
+    transition: transform 0.1s;
+    border-radius: 50%;
+    box-shadow: inset -20px -20px 50px rgba(0,0,0,0.8), 0 0 30px rgba(255,255,255,0.1);
+    overflow: hidden;
+}
+
+.sphere::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 30% 30%, rgba(255, 255, 255, 0.4), transparent 60%);
+    z-index: 2;
+    pointer-events: none;
+}
+
+.sphere div {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    background-size: cover;
+    background-position: center;
+    backface-visibility: hidden;
+}
+
+@keyframes rotate {
+    from { transform: rotateY(0deg); }
+    to { transform: rotateY(360deg); }
+}
+
+.detailed-intel-btn {
+    margin-top: 1rem;
+    background: transparent;
+    border: 1px solid var(--text-primary);
+    color: var(--text-primary);
+    padding: 0.8rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+.detailed-intel-btn:hover {
+    background: rgba(255, 255, 255, 0.1);
+}
+
+</style>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&family=Montserrat:wght@700&display=swap" rel="stylesheet">
@@ -110,6 +388,135 @@
             <p id="sidebar-desc" style="margin-top: 2rem;"></p>
         </div>
     </aside>
-    <script src="assets/js/main.js"></script>
+    <script>
+document.addEventListener('DOMContentLoaded', () => {
+    const planetData = {
+        moon: {
+            title: "The Moon",
+            gravity: "1.62 m/s²",
+            temp: "-173 to 127 °C",
+            atm: "Exosphere (Thin)",
+            desc: "Earth's only natural satellite. It is the fifth largest moon in the Solar System."
+        },
+        mars: {
+            title: "Mars",
+            gravity: "3.71 m/s²",
+            temp: "-63 °C (Avg)",
+            atm: "Carbon Dioxide (95%)",
+            desc: "The Red Planet is home to the highest mountain and deepest, longest valley in the solar system."
+        },
+        jupiter: {
+            title: "Jupiter",
+            gravity: "24.79 m/s²",
+            temp: "-110 °C",
+            atm: "Hydrogen & Helium",
+            desc: "The largest planet in our solar system. Its Great Red Spot is a storm larger than Earth."
+        },
+        proxima: {
+            title: "Proxima Centauri b",
+            gravity: "Unknown (Est. 1.1 Earth)",
+            temp: "-39 °C (Est)",
+            atm: "Possible",
+            desc: "An Earth-sized exoplanet orbiting within the habitable zone of Proxima Centauri."
+        }
+    };
+
+    const observerOptions = {
+        threshold: 0.1
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+    // Distance Tracker Logic
+    const distanceDisplay = document.getElementById('distance-tracker');
+    const sections = document.querySelectorAll('.v-section');
+
+    const updateDistance = () => {
+        let currentDistance = "0 km";
+        sections.forEach(section => {
+            const rect = section.getBoundingClientRect();
+            if (rect.top <= window.innerHeight / 2 && rect.bottom >= window.innerHeight / 2) {
+                currentDistance = section.getAttribute('data-distance');
+            }
+        });
+        distanceDisplay.textContent = currentDistance;
+        
+        // Smooth background transition based on scroll position
+        const scrollPercent = window.scrollY / (document.documentElement.scrollHeight - window.innerHeight);
+        if (scrollPercent > 0.5) {
+            document.body.style.backgroundColor = '#0B0D17';
+        } else if (scrollPercent > 0.1) {
+            document.body.style.backgroundColor = '#1A237E';
+        } else {
+            document.body.style.backgroundColor = '#E0F2F1';
+        }
+    };
+
+    window.addEventListener('scroll', updateDistance);
+    updateDistance(); // Initial call
+
+    // Sidebar logic
+    const sidebar = document.getElementById('discovery-sidebar');
+    const closeBtn = document.getElementById('close-sidebar');
+
+    const showSidebar = (planetKey) => {
+        const data = planetData[planetKey];
+        if (!data) return;
+
+        document.getElementById('sidebar-title').textContent = data.title;
+        document.getElementById('stat-gravity').textContent = data.gravity;
+        document.getElementById('stat-temp').textContent = data.temp;
+        document.getElementById('stat-atm').textContent = data.atm;
+        document.getElementById('sidebar-desc').textContent = data.desc;
+
+        sidebar.classList.add('active');
+    };
+
+    document.querySelectorAll('.detailed-intel-btn, .planet-container').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            const planet = e.currentTarget.getAttribute('data-planet');
+            showSidebar(planet);
+        });
+    });
+
+    closeBtn.addEventListener('click', () => {
+        sidebar.classList.remove('active');
+    });
+
+    // Simple drag-to-rotate logic
+    document.querySelectorAll('.planet-container').forEach(container => {
+        let isDragging = false;
+        let startX;
+        const sphere = container.querySelector('.sphere');
+
+        container.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startX = e.clientX;
+            sphere.style.animationPlayState = 'paused';
+        });
+
+        window.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+            const x = e.clientX;
+            const walk = (x - startX) * 0.5;
+            sphere.style.transform = `rotateY(${walk}deg)`;
+        });
+
+        window.addEventListener('mouseup', () => {
+            isDragging = false;
+            sphere.style.animationPlayState = 'running';
+        });
+    });
+});
+
+</script>
 </body>
 </html>
